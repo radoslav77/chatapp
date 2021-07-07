@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{% static 'chatapp/style.css' %}">
+    <link rel="stylesheet" href="{% static 'chatapp/register.css' %}">
+    <title>Chat app</title>
+</head>
+<body>
+    <ul id="btn">
+        <li><a href="#" class="current">Home</a></li>
+        <li><a href="{% url 'register' %}">Register</a></li>
+        <li><a href="{% url 'login_user' %}">Login</a></li>
+        <li><a href="{% url 'logout_user' %}">Logout</a></li>
+    </ul>
+ {% block body %}
+ {% endblock %}
+    <script src="{% static 'chatapp/script.js' %}"></script>
+</body>
+</html>

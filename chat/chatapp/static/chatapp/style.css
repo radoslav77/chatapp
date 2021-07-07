@@ -67,3 +67,17 @@ body {
   background-color: #fff;
   text-align: center;
 }
+
+#btn {
+  display: flex;
+  list-style-type: none;
+  align-items: center;
+  justify-content: center;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+  padding: 7px 15px;
+  transition: all 0.3s ease-in-out;
+}
