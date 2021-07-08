@@ -1,5 +1,35 @@
 {% extends 'chatapp/base.html' %}
+{% block style %}
+<style>
+.keyboard {
+    background-color: rgb(247, 239, 171);
+    width: 100%;
+    height: 100px;
+    margin-top: 70%;
+    margin-bottom: 0;
+    border-top: solid #999 2px;
 
+    
+  }
+  textarea {
+    width: 80%;
+    margin-top: 40px;
+  }
+  textarea:focus{
+      outline: none;
+  }
+  button{
+      width: 15%;
+      height: 35px;
+      margin-top: 40px;
+    margin-left: 10px;      
+  }
+  form{
+      display: flex;
+      flex-direction: row;
+  }
+  </style>
+{% endblock %}
 {% block body %}
  <div class="container">
     <h1> My prject</h1>    
@@ -18,6 +48,11 @@
             <p>askgdfiugaspun aughsdfuhasjdn aughsdufhguoa augfdujhba dsg aljdfighpiahgvlinhfdao aiohdgfoihaoihg[oiand aihogfdh[a ndh[oiah</p>
         </div>
     </div>
-
+    <div class="keyboard" >
+        <form action="">
+            <textarea name="text" id="" cols="30" rows="2"></textarea>
+            <button>Submit</button>
+        </form>
+    </div>
  </div>
 {% endblock %}

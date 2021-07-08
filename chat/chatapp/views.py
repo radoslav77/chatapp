@@ -9,9 +9,11 @@ def index(request):
     if request.user.is_authenticated:
         user = request.user.username
 
-    return render(request, 'chatapp/index.html', {
-        'user': user
-    })
+        return render(request, 'chatapp/index.html', {
+            'user': user
+        })
+    else:
+        return render(request, 'chatapp/start.html', {})
 
 
 def register(request):
@@ -69,6 +71,6 @@ def logout_user(request):
     if request.user.is_authenticated:
 
         logout(request)
-        return redirect('login_user')
+        return redirect('index')
     else:
-        return redirect('login_user')
+        return redirect('index')

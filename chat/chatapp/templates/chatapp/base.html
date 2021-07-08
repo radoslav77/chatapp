@@ -9,13 +9,20 @@
     <link rel="stylesheet" href="{% static 'chatapp/style.css' %}">
     <link rel="stylesheet" href="{% static 'chatapp/register.css' %}">
     <title>Chat app</title>
+    {% block style %}
+    {% endblock %}
 </head>
 <body>
     <ul id="btn">
-        <li><a href="#" class="current">Home</a></li>
+       
+        {% if not user.is_authenticated %}
         <li><a href="{% url 'register' %}">Register</a></li>
         <li><a href="{% url 'login_user' %}">Login</a></li>
+        {% endif %}
+        {% if  user.is_authenticated %}
+        <li><a href="#" class="current">Home</a></li>
         <li><a href="{% url 'logout_user' %}">Logout</a></li>
+        {% endif %}
     </ul>
  {% block body %}
  {% endblock %}
