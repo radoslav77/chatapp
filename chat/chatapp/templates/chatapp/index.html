@@ -48,8 +48,9 @@
             <p>askgdfiugaspun aughsdfuhasjdn aughsdufhguoa augfdujhba dsg aljdfighpiahgvlinhfdao aiohdgfoihaoihg[oiand aihogfdh[a ndh[oiah</p>
         </div>
     </div>
-    <div class="keyboard" >
-        <form action="">
+    <div class="keyboard" >{% csrf_token %}
+        <form action="{% url 'post' %}" method="POST">
+            
             <textarea name="text" id="" cols="30" rows="2"></textarea>
             <button>Submit</button>
         </form>

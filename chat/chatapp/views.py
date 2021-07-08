@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import *
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotFound
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 
@@ -74,3 +75,12 @@ def logout_user(request):
         return redirect('index')
     else:
         return redirect('index')
+# Posting of message
+
+
+@csrf_exempt
+def post(request):
+    if request.method == 'POST':
+        msg = request.POST['text']
+        print(msg)
+    return render(request, 'chatapp/start.html')
