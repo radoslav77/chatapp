@@ -1,0 +1,11 @@
+{% extends 'chatapp/base.html' %}
+
+{% block body %}
+    <div class="container">
+        <h3>{{user}}</h3>
+        {% for u in users %}
+        <h5><a href="{% url 'chat' u %}">{{u}}</a></h5>
+        {% endfor %}
+    </div>
+
+{% endblock %}

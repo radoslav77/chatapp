@@ -3,18 +3,14 @@ from .forms import *
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotFound
 from django.views.decorators.csrf import csrf_exempt
+from .models import *
+
 # Create your views here.
 
 
 def index(request):
-    if request.user.is_authenticated:
-        user = request.user.username
 
-        return render(request, 'chatapp/index.html', {
-            'user': user
-        })
-    else:
-        return render(request, 'chatapp/start.html', {})
+    return render(request, 'chatapp/start.html')
 
 
 def register(request):
@@ -84,3 +80,32 @@ def post(request):
         msg = request.POST['text']
         print(msg)
     return render(request, 'chatapp/start.html')
+
+
+def home(request):
+    if request.user.is_authenticated:
+        user = request.user.username
+        friends = User.objects.all()
+        users = []
+        # creating an arr of users
+        for u in friends:
+            users.append(u.username)
+        # check for the currant user and removes it from the arr
+        for currant in users:
+            if currant == user:
+                users.remove(currant)
+
+        return render(request, 'chatapp/home.html', {
+            'user': user,
+            'users': users,
+        })
+
+
+def chat(request, username):
+    if request.user.is_authenticated:
+        user = request.user.username
+
+        return render(request, 'chatapp/index.html', {
+            'user': user,
+            'reciver': username
+        })
