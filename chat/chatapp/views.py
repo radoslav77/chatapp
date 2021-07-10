@@ -75,10 +75,13 @@ def logout_user(request):
 
 
 @csrf_exempt
-def post(request):
+def post(request, username):
     if request.method == 'POST':
         msg = request.POST['text']
-        print(msg)
+        receiver = username
+        sender = request.user.username
+        message = Message(message=msg, sender=sender, receiver=receiver)
+        message.save()
     return render(request, 'chatapp/start.html')
 
 
@@ -104,8 +107,17 @@ def home(request):
 def chat(request, username):
     if request.user.is_authenticated:
         user = request.user.username
+        recived = Message.objects.all()
+        msg_recived = []
+        for m in recived:
+            if m.receiver == request.user.username:
+                msg_recived.append(m)
+        msg = Message.objects.filter(receiver=username)
+        print(recived)
 
         return render(request, 'chatapp/index.html', {
             'user': user,
-            'reciver': username
+            'reciver': username,
+            'messages': msg,
+            'recived_msgs': msg_recived,
         })
