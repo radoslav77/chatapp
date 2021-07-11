@@ -71,9 +71,9 @@ def logout_user(request):
         return redirect('index')
     else:
         return redirect('index')
+
+
 # Posting of message
-
-
 @csrf_exempt
 def post(request, username):
     if request.method == 'POST':
@@ -82,7 +82,9 @@ def post(request, username):
         sender = request.user.username
         message = Message(message=msg, sender=sender, receiver=receiver)
         message.save()
-    return render(request, 'chatapp/start.html')
+    return redirect('index')
+
+# profile paage with all of freinds connections
 
 
 def home(request):
@@ -103,21 +105,25 @@ def home(request):
             'users': users,
         })
 
+# function for the chat messages
+
 
 def chat(request, username):
     if request.user.is_authenticated:
         user = request.user.username
-        recived = Message.objects.all()
-        msg_recived = []
-        for m in recived:
-            if m.receiver == request.user.username:
-                msg_recived.append(m)
+        recived = Message.objects.filter(receiver=user)
+
         msg = Message.objects.filter(receiver=username)
+        # combining the two query in one
+        data = recived | msg
+
+        msg_data = data.distinct().order_by('timestamp')
+        print(msg_data)
         print(recived)
+        print(msg)
 
         return render(request, 'chatapp/index.html', {
             'user': user,
             'reciver': username,
-            'messages': msg,
-            'recived_msgs': msg_recived,
+            'messages': msg_data,
         })

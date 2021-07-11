@@ -40,7 +40,8 @@
 {% block body %}
 <div class="container">
     <h1> My prject</h1>
-    {% for recived in recived_msgs %}
+    {% for recived in messages %}
+    {% if  reciver in recived.sender%}
     <div class="msg left">
         <h4>{{reciver}}</h4>
         <span>{{recived.timestamp}}</span>
@@ -48,17 +49,19 @@
             <p>{{recived}}</p>
         </div>
     </div>
-    {% endfor %}
-    {% for msg in messages %}
+    {% endif %}
+    {% if user in recived.sender %}
     <div class="msg rigth">
         <h4>{{user}}</h4>
-        <span>{{msg.timestamp}}</span>
+        <span>{{recived.timestamp}}</span>
         <div class="message">
-            <p>{{msg}}</p>
+            <p>{{recived}}</p>
         </div>
     </div>
+    {% endif %}
     {% endfor %}
-    <div class="keyboard">{% csrf_token %}
+    <div class="keyboard">
+        {% csrf_token %}
         <form action="{% url 'post' reciver %}" method="POST">
 
             <textarea name="text" id="" cols="30" rows="2"></textarea>
@@ -66,4 +69,26 @@
         </form>
     </div>
 </div>
+<script>
+    const times = document.querySelectorAll('span')
+    let time = times
+    let order = []
+    
+    
+    time.forEach(t => {
+        let El = t.innerHTML
+        
+        order.push(El)
+    })
+
+    for(let i = 0; i < time.length; i++){
+        
+    }
+    order.sort(function(x, y){
+    return x.timestamp - y.timestamp;
+    })
+    console.log( order.sort(function(x, y){
+    return x.timestamp - y.timestamp;
+    }))
+</script>
 {% endblock %}
