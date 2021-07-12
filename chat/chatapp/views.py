@@ -88,7 +88,7 @@ def post(request, username):
 
 
 def home(request):
-    if request.user.is_authenticated:
+
         user = request.user.username
         friends = User.objects.all()
         users = []
@@ -109,7 +109,7 @@ def home(request):
 
 
 def chat(request, username):
-    if request.user.is_authenticated:
+
         user = request.user.username
         recived = Message.objects.filter(receiver=user)
 
