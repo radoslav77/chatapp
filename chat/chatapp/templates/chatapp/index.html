@@ -1,4 +1,5 @@
 {% extends 'chatapp/base.html' %}
+
 {% block style %}
 <style>
     .container{
@@ -11,33 +12,46 @@
         margin-top: 70%;
         margin-bottom: 0;
         border-top: solid #999 2px;
-
-
     }
 
     textarea {
         width: 80%;
-        margin-top: 40px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        height: auto;
     }
 
     textarea:focus {
         outline: none;
     }
 
-    button {
-        width: 15%;
-        height: 35px;
-        margin-top: 40px;
+    #send {
+        width: 15%; 
+        margin-top: 20px;
         margin-left: 10px;
+        margin-bottom: 10px;
     }
 
-    form {
+    #form {
         display: flex;
         flex-direction: row;
+        width: 100%;
     }
 
     .keyboard {
         display: flex;
+    }
+    i {
+        position: absolute;
+        right: 10px;
+        bottom: 5px;
+        
+    }
+    i:active{
+        position: absolute;
+        right: 10px;
+        bottom: 5px;
+        color: blue;
     }
 </style>
 {% endblock %}
@@ -51,6 +65,7 @@
         <span>{{recived.timestamp}}</span>
         <div class="message">
             <p>{{recived}}</p>
+            <i class="fas fa-check-double "></i>
         </div>
     </div>
     {% endif %}
@@ -60,20 +75,17 @@
         <span>{{recived.timestamp}}</span>
         <div class="message">
             <p>{{recived}}</p>
+            <i class="fas fa-check-double"></i>
         </div>
     </div>
     {% endif %}
     {% endfor %}
     <div class="keyboard">
         {% csrf_token %}
-        <form action="{% url 'post' reciver %}" method="POST">
+        <form id="form" action="{% url 'post' reciver %}" method="POST">
 
             <textarea name="text" id="" cols="30" rows="2"></textarea>
-            <button>Sent</button>
-            <div class="keyboard">
-                <input class="input" placeholder="Tap on the virtual keyboard to start" />
-                <div class="simple-keyboard"></div>
-            </div>
+            <button id="send">Sent</button>
         </form>
     </div>
 </div>
@@ -89,14 +101,6 @@
         order.push(El)
     })
 
-    for(let i = 0; i < time.length; i++){
-        
-    }
-    order.sort(function(x, y){
-    return x.timestamp - y.timestamp;
-    })
-    console.log( order.sort(function(x, y){
-    return x.timestamp - y.timestamp;
-    }))
+
 </script>
 {% endblock %}

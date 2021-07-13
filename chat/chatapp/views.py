@@ -3,14 +3,25 @@ from .forms import *
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotFound
 from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
 from .models import *
 
 # Create your views here.
 
 
 def index(request):
+    user = request.user.username
+    msg = Message.objects.filter(receiver=user)
+    new_msg = []
+    for i in msg:
+        if i.is_read == False:
+            new_msg.append(i.sender)
+    for b in msg:
+        print(b.is_read)
 
-    return render(request, 'chatapp/start.html')
+    return render(request, 'chatapp/start.html', {
+        'new': new_msg,
+    })
 
 
 def register(request):
@@ -82,48 +93,62 @@ def post(request, username):
         sender = request.user.username
         message = Message(message=msg, sender=sender, receiver=receiver)
         message.save()
-    return redirect('index')
+    return redirect('home')
 
 # profile paage with all of freinds connections
 
 
 def home(request):
 
-        user = request.user.username
-        friends = User.objects.all()
-        users = []
-        # creating an arr of users
-        for u in friends:
-            users.append(u.username)
-        # check for the currant user and removes it from the arr
-        for currant in users:
-            if currant == user:
-                users.remove(currant)
+    user = request.user.username
+    friends = User.objects.all()
+    users = []
+    # creating an arr of users
+    for u in friends:
+        users.append(u.username)
+    # check for the currant user and removes it from the arr
+    for currant in users:
+        if currant == user:
+            users.remove(currant)
 
-        return render(request, 'chatapp/home.html', {
-            'user': user,
-            'users': users,
-        })
+    return render(request, 'chatapp/home.html', {
+        'user': user,
+        'users': users,
+    })
 
 # function for the chat messages
 
 
 def chat(request, username):
 
-        user = request.user.username
-        recived = Message.objects.filter(receiver=user)
+    user = request.user.username
+    recived = Message.objects.filter(receiver=user)
 
-        msg = Message.objects.filter(receiver=username)
-        # combining the two query in one
-        data = recived | msg
+    msg = Message.objects.filter(receiver=username)
+    # combining the two query in one
+    data = recived | msg
 
-        msg_data = data.distinct().order_by('timestamp')
-        print(msg_data)
-        print(recived)
-        print(msg)
+    msg_data = data.distinct().order_by('timestamp')
+    readed = []
+    for read in msg_data:
+        if read.sender == username:
+            read.is_read = True
+            read.save()
+            readed.append(read)
+        elif read.receiver == user:
+            read.is_read = True
+            read.save()
+            readed.append(read)
+    #readed.is_read = True
+    # readed.save()
+    print(readed)
+    context_data = serializers.serialize(
+        'xml', Message.objects.all(), fields=('id', 'is_read'))
+    context = JsonResponse(context_data, safe=False)
+   # print(context.content)
 
-        return render(request, 'chatapp/index.html', {
-            'user': user,
-            'reciver': username,
-            'messages': msg_data,
-        })
+    return render(request, 'chatapp/index.html', {
+        'user': user,
+        'reciver': username,
+        'messages': msg_data,
+    })

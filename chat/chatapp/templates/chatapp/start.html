@@ -11,6 +11,10 @@
 
 
 {% block body %}
-
+    <ul>
+        {% for msg in new %}
+        <li><a href="{% url 'chat' msg %}">From {{msg}}</a></li>
+        {% endfor %}
+    </ul>
 
 {% endblock %}
