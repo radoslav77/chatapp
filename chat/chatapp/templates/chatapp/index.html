@@ -71,7 +71,7 @@
     {% endif %}
     {% if user in recived.sender %}
     <div class="msg rigth">
-        <h4>{{user}}</h4>
+        <h4>You</h4>
         <span>{{recived.timestamp}}</span>
         <div class="message">
             <p>{{recived}}</p>
@@ -90,16 +90,23 @@
     </div>
 </div>
 <script>
-    const times = document.querySelectorAll('span')
-    let time = times
-    let order = []
-    
-    
-    time.forEach(t => {
-        let El = t.innerHTML
-        
-        order.push(El)
+const url = "{% url 'chat' reciver %}"
+fetch(url, {
+    method:'POST', Headers:{'X-CSRFToken': csrftoken,}
+    ,
+    body:JSON.stringify({
+        //sender: sender,
+       // receiver: receiver,
+       // message: message,
+       // timestamp: timestamp,
+       // is_read: is_read
+
     })
+})
+  .then(response => response.text())
+  .then(data => console.log(data));
+
+
 
 
 </script>

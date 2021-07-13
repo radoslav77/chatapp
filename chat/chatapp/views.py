@@ -1,3 +1,5 @@
+import json
+import requests
 from django.shortcuts import render, redirect
 from .forms import *
 from django.contrib.auth import login, logout, authenticate
@@ -139,13 +141,13 @@ def chat(request, username):
             read.is_read = True
             read.save()
             readed.append(read)
-    #readed.is_read = True
-    # readed.save()
-    print(readed)
+
+    #data = json.loads(request.container)
+   # print(data)
     context_data = serializers.serialize(
         'xml', Message.objects.all(), fields=('id', 'is_read'))
     context = JsonResponse(context_data, safe=False)
-   # print(context.content)
+    # print(context.content)
 
     return render(request, 'chatapp/index.html', {
         'user': user,

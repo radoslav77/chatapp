@@ -16,3 +16,13 @@ class Message(models.Model):
 
     class Meta:
         ordering = ('timestamp',)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "sender": self.sender.message,
+            "receiver": [user.message for user in self.receiver.all()],
+            "message": self.message,
+            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p"),
+            "is_read": self.is_read,
+        }
