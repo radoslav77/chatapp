@@ -21,9 +21,10 @@
 </head>
 <body>
     <ul id="btn">
-        {% if user.is_authenticated %}
+        {% if user %}
             <li><a href="{% url 'home' %}" class="current">Home</a></li>
             <li><a href="{% url 'logout_user' %}">Logout</a></li>
+           
         {% else %}
             <li><a href="{% url 'register' %}">Register</a></li>
             <li><a href="{% url 'login_user' %}">Login</a></li>

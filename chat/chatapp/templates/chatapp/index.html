@@ -41,17 +41,17 @@
     .keyboard {
         display: flex;
     }
-    i {
-        position: absolute;
-        right: 10px;
-        bottom: 5px;
-        
-    }
-    i:active{
+    #double {
         position: absolute;
         right: 10px;
         bottom: 5px;
         color: blue;
+    }
+    i{
+        position: absolute;
+        right: 10px;
+        bottom: 5px;
+        
     }
 </style>
 {% endblock %}
@@ -65,7 +65,11 @@
         <span>{{recived.timestamp}}</span>
         <div class="message">
             <p>{{recived}}</p>
-            <i class="fas fa-check-double "></i>
+            {% if recived.is_read == True %}
+            <i class="fas fa-check-double " id="double"></i>
+            {% else %}
+            <i class="fas fa-check " id="single"></i>
+            {% endif %}
         </div>
     </div>
     {% endif %}
@@ -75,7 +79,11 @@
         <span>{{recived.timestamp}}</span>
         <div class="message">
             <p>{{recived}}</p>
-            <i class="fas fa-check-double"></i>
+            {% if recived.is_read == True %}
+            <i class="fas fa-check-double" id="double"></i>
+            {% else %}
+            <i class="fas fa-check " id="single"></i>
+            {% endif %}
         </div>
     </div>
     {% endif %}
@@ -90,21 +98,19 @@
     </div>
 </div>
 <script>
-const url = "{% url 'chat' reciver %}"
-fetch(url, {
-    method:'POST', Headers:{'X-CSRFToken': csrftoken,}
-    ,
-    body:JSON.stringify({
-        //sender: sender,
-       // receiver: receiver,
-       // message: message,
-       // timestamp: timestamp,
-       // is_read: is_read
-
-    })
-})
-  .then(response => response.text())
-  .then(data => console.log(data));
+ 
+fetch("{% url 'chat_api' reciver %}")
+  .then(response => response.json())
+  .then(data => {
+      data.forEach(entry => {
+        const { sender, is_read, receiver } = entry   
+        if(sender) {
+            const doubleTick = document.querySelectorAll('.fas fa-check-double')
+            console.log(doubleTick)
+        }
+      });
+     
+  });
 
 
 

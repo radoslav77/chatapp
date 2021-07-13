@@ -1,20 +1,44 @@
 {% extends 'chatapp/base.html' %}
 {% block style %}
 <style>
+    ul{
+        list-style-type: none;
+        
+        align-items: center; 
+    }
     li{
         font-size: 25px;
         font-weight: bold;
+        align-items: center;
         
     }
+    .msg-box{
+        width: 450px;
+        background-color: #fff;
+        box-shadow: 0 0 3px rgba(0,0,0,0.4);
+        padding: 2rem;
+        align-items: center;
+    }
+    #new{
+        color: blue;
+    }
+
 </style>
 {% endblock %}
 
 
 {% block body %}
+
+<h1>Hello {{user }}</h1>
+
+<h3>You have new message/s from:</h3>
+<div class="msg-box">
     <ul>
+       
+       
         {% for msg in new %}
-        <li><a href="{% url 'chat' msg %}">From {{msg}}</a></li>
+        <li ><a id="new" href="{% url 'chat' msg %}">{{msg}}</a></li>
         {% endfor %}
     </ul>
-
+</div>
 {% endblock %}

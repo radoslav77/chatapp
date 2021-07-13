@@ -1,9 +1,7 @@
-import json
-import requests
 from django.shortcuts import render, redirect
 from .forms import *
 from django.contrib.auth import login, logout, authenticate
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from .models import *
@@ -18,11 +16,11 @@ def index(request):
     for i in msg:
         if i.is_read == False:
             new_msg.append(i.sender)
-    for b in msg:
-        print(b.is_read)
+    new_msg = list(dict.fromkeys(new_msg))
 
     return render(request, 'chatapp/start.html', {
         'new': new_msg,
+        'user': user,
     })
 
 
@@ -97,9 +95,8 @@ def post(request, username):
         message.save()
     return redirect('home')
 
+
 # profile paage with all of freinds connections
-
-
 def home(request):
 
     user = request.user.username
@@ -118,9 +115,8 @@ def home(request):
         'users': users,
     })
 
+
 # function for the chat messages
-
-
 def chat(request, username):
 
     user = request.user.username
@@ -142,15 +138,19 @@ def chat(request, username):
             read.save()
             readed.append(read)
 
-    #data = json.loads(request.container)
-   # print(data)
-    context_data = serializers.serialize(
-        'xml', Message.objects.all(), fields=('id', 'is_read'))
-    context = JsonResponse(context_data, safe=False)
-    # print(context.content)
-
     return render(request, 'chatapp/index.html', {
         'user': user,
         'reciver': username,
         'messages': msg_data,
+
     })
+
+
+# Api to get JSON data
+def chat_api(request, username):
+
+    context_data = serializers.serialize(
+        'json', Message.objects.all())
+    context = JsonResponse(context_data, safe=False)
+    print(context_data)
+    return HttpResponse(context_data, content_type="text/json-comment-filtered")
