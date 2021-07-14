@@ -28,9 +28,14 @@
 
 
 {% block body %}
-
+{% if not user %}
+<h1>Hello there please login or register!</h1>
+{% else %}
 <h1>Hello {{user }}</h1>
 
+{% if not new %}
+<h3>You have no new messages!</h3>
+{% else %}
 <h3>You have new message/s from:</h3>
 <div class="msg-box">
     <ul>
@@ -41,4 +46,6 @@
         {% endfor %}
     </ul>
 </div>
+{% endif %}
+{% endif %}
 {% endblock %}

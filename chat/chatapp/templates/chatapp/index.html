@@ -47,22 +47,37 @@
         bottom: 5px;
         color: blue;
     }
-    i{
+
+    #single{
         position: absolute;
         right: 10px;
-        bottom: 5px;
-        
+        bottom: 5px;  
     }
+    #trash{
+        position: absolute;
+        right: 10px;
+        top: 2px;
+    }
+    .msg span {
+  position: absolute;
+  top: 0;
+  right: 30px;
+}
 </style>
 {% endblock %}
 {% block body %}
 <div class="container">
-    <h1> My prject</h1>
+    {% if error %}
+    <h1>{{error}}</h1>
+    {% else %}
+    <h1> Hello {{user}} </h1>
+    {% endif %}
     {% for recived in messages %}
     {% if  reciver in recived.sender%}
     <div class="msg left">
-        <h4>{{reciver}}</h4>
+        <h4>{{reciver}}</h4>      
         <span>{{recived.timestamp}}</span>
+        <a href="{% url 'delete' recived.id reciver %}"><i class="fas fa-trash-alt" id="trash"></i></a>
         <div class="message">
             <p>{{recived}}</p>
             {% if recived.is_read == True %}
@@ -77,6 +92,7 @@
     <div class="msg rigth">
         <h4>You</h4>
         <span>{{recived.timestamp}}</span>
+        <a href="{% url 'delete' recived.id reciver %}"><i class="fas fa-trash-alt" id="trash"></i></a>
         <div class="message">
             <p>{{recived}}</p>
             {% if recived.is_read == True %}

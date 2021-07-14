@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import *
 from django.contrib.auth import login, logout, authenticate
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from .models import *
@@ -93,10 +93,20 @@ def post(request, username):
         sender = request.user.username
         message = Message(message=msg, sender=sender, receiver=receiver)
         message.save()
-    return redirect('home')
+
+        if not msg:
+            error = 'You trying to send an empty Message!'
+            return render(request, 'chatapp/index.html', {
+                'user': request.user.username,
+                'reciver': username,
+                'messages': msg,
+                'error': error
+
+            })
+    return redirect('chat', username)
 
 
-# profile paage with all of freinds connections
+# profile page with all of freinds connections
 def home(request):
 
     user = request.user.username
@@ -146,11 +156,19 @@ def chat(request, username):
     })
 
 
-# Api to get JSON data
+# Api to get JSON data from the models fields
 def chat_api(request, username):
 
     context_data = serializers.serialize(
         'json', Message.objects.all())
     context = JsonResponse(context_data, safe=False)
-    print(context_data)
+
     return HttpResponse(context_data, content_type="text/json-comment-filtered")
+
+
+# delete post
+def delete(request, id, username):
+    if request.user.is_authenticated:
+        msg = Message.objects.filter(pk=id)
+        msg.delete()
+    return redirect('chat', username)
